@@ -1,3 +1,10 @@
+/* ============================================================================
+   GEOPORTAL BUENAVENTURA - ESTILOS CSS COMPLETOS
+   Autor: Edinson Christofer Angulo
+   Diseño: Verde claro y Amarillo claro - Responsive
+   ============================================================================ */
+
+/* ESTILOS GENERALES */
 * { 
   margin: 0; 
   padding: 0; 
@@ -15,6 +22,7 @@ body {
   background: linear-gradient(135deg, #86efac 0%, #fef08a 100%);
 }
 
+/* SIDEBAR PRINCIPAL */
 #sidebar {
   position: absolute;
   left: 0;
@@ -28,6 +36,7 @@ body {
   display: flex;
   flex-direction: column;
   animation: slideInLeft 0.5s ease-out;
+  transition: transform 0.3s ease;
 }
 
 @keyframes slideInLeft {
@@ -41,6 +50,48 @@ body {
   }
 }
 
+/* BOTÓN TOGGLE PARA MÓVIL */
+#sidebar-toggle {
+  display: none;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1001;
+  background: linear-gradient(135deg, #86efac 0%, #fef08a 100%);
+  border: none;
+  border-radius: 12px;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  font-size: 24px;
+  transition: all 0.3s ease;
+}
+
+#sidebar-toggle:active {
+  transform: scale(0.95);
+}
+
+/* OVERLAY PARA MÓVIL */
+#sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+#sidebar-overlay.active {
+  display: block;
+  opacity: 1;
+}
+
+/* HEADER DEL SIDEBAR */
 #header {
   background: linear-gradient(135deg, #86efac 0%, #fef08a 100%);
   color: #1e293b;
@@ -84,10 +135,22 @@ body {
   letter-spacing: 0.3px;
 }
 
+/* CONTENEDOR DE BÚSQUEDA */
 #search-container {
   padding: 20px;
   background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
   border-bottom: 1px solid #e9ecef;
+  position: relative;
+}
+
+#search-container::before {
+  content: '🔍';
+  position: absolute;
+  left: 36px;
+  top: 34px;
+  font-size: 16px;
+  pointer-events: none;
+  z-index: 1;
 }
 
 #search-input {
@@ -111,20 +174,7 @@ body {
   transform: translateY(-1px);
 }
 
-#search-container {
-  position: relative;
-}
-
-#search-container::before {
-  content: '🔍';
-  position: absolute;
-  left: 36px;
-  top: 34px;
-  font-size: 16px;
-  pointer-events: none;
-  z-index: 1;
-}
-
+/* RESULTADOS DE BÚSQUEDA */
 #search-results {
   max-height: 240px;
   overflow-y: auto;
@@ -174,6 +224,7 @@ body {
   padding-left: 20px;
 }
 
+/* INFORMACIÓN DE BARRIO */
 #barrio-info {
   padding: 20px;
   background: linear-gradient(135deg, #ecfccb 0%, #fef9c3 100%);
@@ -240,6 +291,7 @@ body {
   opacity: 0.9;
 }
 
+/* INFORMACIÓN DE DISTANCIAS */
 #distance-info {
   padding: 20px;
   background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
@@ -300,6 +352,7 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* ETIQUETAS DE BARRIOS EN EL MAPA */
 .barrio-label {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
@@ -314,6 +367,7 @@ body {
   letter-spacing: 0.3px;
 }
 
+/* CONTENEDOR DE CAPAS */
 #layers-container {
   flex: 1;
   overflow-y: auto;
@@ -464,6 +518,7 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+/* MENSAJE DE ESTADO */
 #status {
   position: absolute;
   top: 20px;
@@ -492,6 +547,7 @@ body {
   }
 }
 
+/* FOOTER */
 #footer {
   padding: 16px 20px;
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
@@ -503,6 +559,7 @@ body {
   letter-spacing: 0.5px;
 }
 
+/* SELECTOR DE MAPAS BASE */
 #basemap-selector {
   position: absolute;
   top: 20px;
@@ -596,6 +653,7 @@ body {
   letter-spacing: 0.3px;
 }
 
+/* CONTROLES DE ZOOM */
 #zoom-controls {
   position: absolute;
   top: 230px;
@@ -664,6 +722,7 @@ body {
   display: none;
 }
 
+/* BOTÓN LIMPIAR SELECCIÓN */
 #clear-selection-btn {
   margin-top: 12px;
   width: 100%;
@@ -690,7 +749,7 @@ body {
   transform: translateY(0);
 }
 
-/* Animaciones para elementos interactivos */
+/* ANIMACIONES PARA ELEMENTOS INTERACTIVOS */
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-5px); }
@@ -705,3 +764,159 @@ body {
 .layer-item:nth-child(3) .layer-icon { animation-delay: 0.4s; }
 .layer-item:nth-child(4) .layer-icon { animation-delay: 0.6s; }
 .layer-item:nth-child(5) .layer-icon { animation-delay: 0.8s; }
+
+/* ============================================================================
+   RESPONSIVE DESIGN - MEDIA QUERIES
+   ============================================================================ */
+
+/* TABLETS Y MÓVILES (max-width: 768px) */
+@media (max-width: 768px) {
+  #sidebar {
+    width: 85vw;
+    max-width: 320px;
+    transform: translateX(-100%);
+  }
+
+  #sidebar.open {
+    transform: translateX(0);
+  }
+
+  #sidebar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #basemap-selector {
+    top: 80px;
+    right: 10px;
+    padding: 4px;
+  }
+
+  .basemap-option {
+    min-width: 150px;
+    padding: 10px 12px;
+  }
+
+  .basemap-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .basemap-label {
+    font-size: 11px;
+  }
+
+  #zoom-controls {
+    top: 280px;
+    right: 10px;
+  }
+
+  .zoom-button {
+    width: 48px;
+    height: 48px;
+    font-size: 24px;
+  }
+
+  #status {
+    top: 10px;
+    left: 80px;
+    right: 10px;
+    max-width: calc(100% - 90px);
+    padding: 10px 14px;
+    font-size: 12px;
+  }
+
+  #header h1 {
+    font-size: 18px;
+  }
+
+  #header p {
+    font-size: 11px;
+  }
+
+  #search-input {
+    font-size: 13px;
+    padding: 10px 14px 10px 38px;
+  }
+
+  .layer-category-title {
+    font-size: 11px;
+    padding: 10px 14px;
+  }
+
+  .layer-item {
+    padding: 10px 12px;
+  }
+
+  .layer-name {
+    font-size: 12px;
+  }
+
+  .layer-icon {
+    font-size: 16px;
+    min-width: 22px;
+  }
+
+  #barrio-info, #distance-info {
+    max-height: 300px;
+  }
+}
+
+/* MÓVILES PEQUEÑOS (max-width: 480px) */
+@media (max-width: 480px) {
+  #sidebar {
+    width: 90vw;
+    max-width: 280px;
+  }
+
+  #basemap-selector {
+    flex-direction: column;
+    padding: 4px;
+  }
+
+  .basemap-option {
+    min-width: 140px;
+    padding: 8px 10px;
+    gap: 8px;
+  }
+
+  .basemap-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .basemap-label {
+    font-size: 10px;
+  }
+
+  #zoom-controls {
+    right: 8px;
+  }
+
+  .zoom-button {
+    width: 44px;
+    height: 44px;
+    font-size: 22px;
+  }
+
+  #header h1 {
+    font-size: 16px;
+  }
+
+  #layers-container {
+    padding: 12px;
+  }
+
+  .info-item, .distance-item {
+    font-size: 11px;
+    padding: 8px 10px;
+  }
+}
+
+/* TABLETS (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  #sidebar {
+    width: 300px;
+  }
+}
