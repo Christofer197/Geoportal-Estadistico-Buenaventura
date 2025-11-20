@@ -9,64 +9,69 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div id="sidebar">
-    <div id="header">
-      <h1>🗺️ Geoportal Buenaventura</h1>
-      <p>Edinson Christofer Angulo</p>
-    </div>
-    
-    <div id="search-container">
-      <input type="text" id="search-input" placeholder="Buscar barrio...">
-      <div id="search-results"></div>
-      <button id="clear-selection-btn" style="display: none;">Limpiar Selección</button>
-    </div>
 
-    <div id="barrio-info">
-      <h4 id="barrio-name"></h4>
-      <div id="barrio-stats"></div>
-    </div>
+<button id="sidebar-toggle">☰</button>
+<div id="sidebar-overlay"></div>
 
-    <div id="distance-info">
-      <h4>
-        📍 Distancias desde el punto
-        <button id="clear-distance-btn">🗑️ Limpiar</button>
-      </h4>
-      <div id="distance-stats"></div>
-    </div>
-    
-    <div id="layers-container">
-      <div id="layers"></div>
-    </div>
-
-    <div id="footer">
-      Edinson Christofer - Análisis Territorial
-    </div>
+<div id="sidebar">
+  <div id="header">
+    <h1>🗺️ Geoportal Buenaventura</h1>
+    <p>Edinson Christofer Angulo</p>
+  </div>
+  
+  <div id="search-container">
+    <input type="text" id="search-input" placeholder="Buscar barrio...">
+    <div id="search-results"></div>
+    <button id="clear-selection-btn" style="display: none;">Limpiar Selección</button>
   </div>
 
-  <div id="basemap-selector">
-    <div class="basemap-option active" data-basemap="osm">
-      <div class="basemap-icon osm"></div>
-      <div class="basemap-label">OpenStreetMap</div>
-    </div>
-    <div class="basemap-option" data-basemap="satellite">
-      <div class="basemap-icon satellite"></div>
-      <div class="basemap-label">Satélite</div>
-    </div>
-    <div class="basemap-option" data-basemap="carto">
-      <div class="basemap-icon carto"></div>
-      <div class="basemap-label">Carto Light</div>
-    </div>
+  <div id="barrio-info">
+    <h4 id="barrio-name"></h4>
+    <div id="barrio-stats"></div>
   </div>
 
-  <div id="zoom-controls">
-    <div class="zoom-button" id="zoom-in" title="Acercar">+</div>
-    <div class="zoom-button" id="zoom-out" title="Alejar">−</div>
+  <div id="distance-info">
+    <h4>
+      📍 Distancias desde el punto
+      <button id="clear-distance-btn">🗑️ Limpiar</button>
+    </h4>
+    <div id="distance-stats"></div>
+  </div>
+  
+  <div id="layers-container">
+    <div id="layers"></div>
   </div>
 
-  <div id="map"></div>
-  <div id="status">Inicializando geoportal...</div>
+  <div id="footer">
+    Edinson Christofer - Análisis Territorial
+  </div>
+</div>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="app.js"></script>
+<div id="basemap-selector">
+  <div class="basemap-option active" data-basemap="osm">
+    <div class="basemap-icon osm"></div>
+    <div class="basemap-label">OpenStreetMap</div>
+  </div>
+  <div class="basemap-option" data-basemap="satellite">
+    <div class="basemap-icon satellite"></div>
+    <div class="basemap-label">Satélite</div>
+  </div>
+  <div class="basemap-option" data-basemap="carto">
+    <div class="basemap-icon carto"></div>
+    <div class="basemap-label">Carto Light</div>
+  </div>
+</div>
+
+<div id="zoom-controls">
+  <div class="zoom-button" id="zoom-in" title="Acercar">+</div>
+  <div class="zoom-button" id="zoom-out" title="Alejar">−</div>
+</div>
+
+<div id="map"></div>
+<div id="status">Inicializando geoportal...</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="script.js"></script>
+
 </body>
 </html>
