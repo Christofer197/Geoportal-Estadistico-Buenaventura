@@ -1,6 +1,13 @@
+// ============================================================================
+// GEOPORTAL BUENAVENTURA - JAVASCRIPT COMPLETO
+// Autor: Edinson Christofer Angulo
+// ============================================================================
+
+// CONFIGURACIÓN DE SUPABASE
 const SUPABASE_URL = 'https://kfvnhisozwdjkxddyskn.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtmdm5oaXNvendkamt4ZGR5c2tuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwMzQ1NTMsImV4cCI6MjA3NTYxMDU1M30.0BUL3RYMkNEnI1s2cvxpkLJDz40VwVaqdLPivzSebjQ';
 
+// VARIABLES GLOBALES
 let map;
 const layerGroups = {};
 let barrios = [];
@@ -24,6 +31,7 @@ let barrioSeleccionadoLayer = null;
 let marcadoresCercanos = [];
 let capasOriginales = {};
 
+// CONFIGURACIÓN DE MAPAS BASE
 const basemaps = {
   osm: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
@@ -36,6 +44,43 @@ const basemaps = {
   })
 };
 
+// CONFIGURACIÓN DE CATEGORÍAS Y CAPAS
+const categorias = {
+  territorio: {
+    titulo: '🌍 Territorio',
+    capas: [
+      { nombre: 'barrios', tipo: 'polygon', color: '#3498db', icono: '🏘️', label: 'Barrios' },
+      { nombre: 'comunas', tipo: 'polygon', color: '#e67e22', icono: '🗺️', label: 'Comunas' }
+    ]
+  },
+  vias: {
+    titulo: '🛣️ Infraestructura Vial',
+    capas: [
+      { nombre: 'vias_pav', tipo: 'line', color: '#34495e', icono: '🛣️', label: 'Vías Pavimentadas' },
+      { nombre: 'vias_sin_pav', tipo: 'line', color: '#95a5a6', icono: '🚧', label: 'Vías Sin Pavimentar' }
+    ]
+  },
+  equipamiento: {
+    titulo: '🏢 Equipamiento Urbano',
+    capas: [
+      { nombre: 'bomberos', tipo: 'point', color: '#e74c3c', icono: '🔥', label: 'Bomberos' },
+      { nombre: 'salud', tipo: 'point', color: '#2980b9', icono: '⚕️', label: 'Salud' },
+      { nombre: 'recracion_deporte', tipo: 'point', color: '#27ae60', icono: '🌳', label: 'Recreación y Deporte' },
+      { nombre: 'seguridad', tipo: 'point', color: '#8e44ad', icono: '👮', label: 'Seguridad' },
+      { nombre: 'educacion', tipo: 'point', color: '#f39c12', icono: '🎓', label: 'Educación' }
+    ]
+  }
+};
+
+const todasLasCapas = [];
+Object.values(categorias).forEach(cat => {
+  todasLasCapas.push(...cat.capas);
+});
+
+// ============================================================================
+// INICIALIZACIÓN DEL MAPA
+// ============================================================================
+
 map = L.map('map', {
   center: [3.8801, -77.0315],
   zoom: 12,
@@ -45,6 +90,33 @@ map = L.map('map', {
 currentBasemap = basemaps.osm;
 currentBasemap.addTo(map);
 barrioLabels.addTo(map);
+
+// ============================================================================
+// EVENT LISTENERS
+// ============================================================================
+
+const sidebarToggle = document.getElementById('sidebar-toggle');
+const sidebar = document.getElementById('sidebar');
+const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+sidebarToggle.addEventListener('click', function() {
+  sidebar.classList.toggle('open');
+  sidebarOverlay.classList.toggle('active');
+});
+
+sidebarOverlay.addEventListener('click', function() {
+  sidebar.classList.remove('open');
+  sidebarOverlay.classList.remove('active');
+});
+
+function cerrarSidebarEnMovil() {
+  if (window.innerWidth <= 768) {
+    setTimeout(() => {
+      sidebar.classList.remove('open');
+      sidebarOverlay.classList.remove('active');
+    }, 300);
+  }
+}
 
 map.on('click', function(e) {
   calcularDistancias(e.latlng);
@@ -94,37 +166,9 @@ document.getElementById('clear-distance-btn').addEventListener('click', function
   limpiarDistancias();
 });
 
-const categorias = {
-  territorio: {
-    titulo: '🌍 Territorio',
-    capas: [
-      { nombre: 'barrios', tipo: 'polygon', color: '#3498db', icono: '🏘️', label: 'Barrios' },
-      { nombre: 'comunas', tipo: 'polygon', color: '#e67e22', icono: '🗺️', label: 'Comunas' }
-    ]
-  },
-  vias: {
-    titulo: '🛣️ Infraestructura Vial',
-    capas: [
-      { nombre: 'vias_pav', tipo: 'line', color: '#34495e', icono: '🛣️', label: 'Vías Pavimentadas' },
-      { nombre: 'vias_sin_pav', tipo: 'line', color: '#95a5a6', icono: '🚧', label: 'Vías Sin Pavimentar' }
-    ]
-  },
-  equipamiento: {
-    titulo: '🏢 Equipamiento Urbano',
-    capas: [
-      { nombre: 'bomberos', tipo: 'point', color: '#e74c3c', icono: '🔥', label: 'Bomberos' },
-      { nombre: 'salud', tipo: 'point', color: '#2980b9', icono: '⚕️', label: 'Salud' },
-      { nombre: 'recracion_deporte', tipo: 'point', color: '#27ae60', icono: '🌳', label: 'Recreación y Deporte' },
-      { nombre: 'seguridad', tipo: 'point', color: '#8e44ad', icono: '👮', label: 'Seguridad' },
-      { nombre: 'educacion', tipo: 'point', color: '#f39c12', icono: '🎓', label: 'Educación' }
-    ]
-  }
-};
-
-const todasLasCapas = [];
-Object.values(categorias).forEach(cat => {
-  todasLasCapas.push(...cat.capas);
-});
+// ============================================================================
+// FUNCIONES AUXILIARES
+// ============================================================================
 
 function crearIcono(capa) {
   return L.divIcon({
@@ -139,6 +183,193 @@ function setStatus(msg, color = 'black') {
   document.getElementById('status').innerHTML = msg;
   document.getElementById('status').style.color = color;
 }
+
+function obtenerCampos(nombre) {
+  const campos = {
+    'barrios': '*',
+    'comunas': '*',
+    'vias_pav': '*',
+    'vias_sin_pav': '*',
+    'bomberos': '*',
+    'recracion_deporte': '*',
+    'salud': '*',
+    'seguridad': '*',
+    'educacion': '*'
+  };
+  
+  return campos[nombre] || '*';
+}
+
+function crearPopup(properties, nombreCapa) {
+  let html = `<div style="min-width:220px; font-family: 'Inter', sans-serif;">`;
+  
+  let titulo = nombreCapa.toUpperCase();
+  if (nombreCapa.toLowerCase() === 'barrios' && properties.barrio) {
+    titulo = properties.barrio;
+  } else if (nombreCapa.toLowerCase() === 'comunas' && properties.comuna) {
+    titulo = `COMUNA ${properties.comuna}`;
+  }
+  
+  html += `<strong style="font-size: 15px; color: #1e293b; display: block; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 2px solid #84cc16;">${titulo}</strong>`;
+  
+  const camposOrdenados = [];
+  const camposImportantes = ['barrio', 'comuna', 'poblacion', 'ipm', 'area', 'nombre', 'tipo'];
+  
+  camposImportantes.forEach(campo => {
+    if (properties[campo] !== undefined && properties[campo] !== null) {
+      camposOrdenados.push(campo);
+    }
+  });
+  
+  for (let key in properties) {
+    if (key !== 'geom' && !camposImportantes.includes(key)) {
+      camposOrdenados.push(key);
+    }
+  }
+  
+  camposOrdenados.forEach(key => {
+    if (key === 'barrio' && nombreCapa.toLowerCase() === 'barrios') {
+      return;
+    }
+    if (key === 'comuna' && nombreCapa.toLowerCase() === 'comunas') {
+      return;
+    }
+    
+    let valor = properties[key];
+    
+    if (valor === null || valor === undefined) {
+      return;
+    } else if (key.toLowerCase().includes('area')) {
+      valor = `${parseFloat(valor).toFixed(2)} km²`;
+    } else if (key.toLowerCase().includes('poblacion') || key.toLowerCase().includes('población')) {
+      valor = parseInt(valor).toLocaleString('es-CO') + ' habitantes';
+    } else if (key.toLowerCase() === 'ipm') {
+      valor = (parseFloat(valor) * 100).toFixed(2);
+    }
+    
+    let nombreCampo = key
+      .replace(/_/g, ' ')
+      .replace(/\b\w/g, l => l.toUpperCase());
+    
+    html += `<div style="margin: 8px 0; padding: 8px; background: #f8f9fa; border-radius: 6px; border-left: 3px solid #84cc16;">`;
+    html += `<span style="font-weight: 600; color: #475569; font-size: 12px;">${nombreCampo}:</span> `;
+    html += `<span style="color: #1e293b; font-size: 13px; font-weight: 500;">${valor}</span>`;
+    html += `</div>`;
+  });
+  
+  html += `</div>`;
+  return html;
+}
+
+function agregarEtiquetaBarrio(geojson, nombreBarrio) {
+  try {
+    const layer = L.geoJSON(geojson);
+    const center = layer.getBounds().getCenter();
+    
+    const label = L.marker(center, {
+      icon: L.divIcon({
+        className: 'barrio-label',
+        html: nombreBarrio,
+        iconSize: null
+      })
+    });
+    
+    label.addTo(barrioLabels);
+  } catch (e) {
+    console.error('Error agregando etiqueta:', e);
+  }
+}
+
+function estiloRayCasting(point, geojson) {
+  let coords = [];
+  
+  if (geojson.type === 'Polygon') {
+    coords = geojson.coordinates[0];
+  } else if (geojson.type === 'MultiPolygon') {
+    coords = geojson.coordinates[0][0];
+  } else {
+    return false;
+  }
+  
+  let inside = false;
+  const x = point.lng;
+  const y = point.lat;
+  
+  for (let i = 0, j = coords.length - 1; i < coords.length; j = i++) {
+    const xi = coords[i][0], yi = coords[i][1];
+    const xj = coords[j][0], yj = coords[j][1];
+    
+    const intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+    if (intersect) inside = !inside;
+  }
+  
+  return inside;
+}
+
+function calcularLongitudSegmento(coordenadas) {
+  if (coordenadas.length < 2) return 0;
+  
+  let longitud = 0;
+  
+  for (let i = 0; i < coordenadas.length - 1; i++) {
+    const [lng1, lat1] = coordenadas[i];
+    const [lng2, lat2] = coordenadas[i + 1];
+    
+    const punto1 = L.latLng(lat1, lng1);
+    const punto2 = L.latLng(lat2, lng2);
+    
+    longitud += punto1.distanceTo(punto2);
+  }
+  
+  return longitud / 1000;
+}
+
+function calcularLongitudViaEnBarrio(viaGeojson, barrioGeojson, barrioBounds) {
+  let longitudTotal = 0;
+  
+  try {
+    let coordinates = [];
+    
+    if (viaGeojson.type === 'LineString') {
+      coordinates = [viaGeojson.coordinates];
+    } else if (viaGeojson.type === 'MultiLineString') {
+      coordinates = viaGeojson.coordinates;
+    }
+    
+    coordinates.forEach(lineCoords => {
+      let segmentosDentro = [];
+      
+      lineCoords.forEach((coord, index) => {
+        const [lng, lat] = coord;
+        const punto = L.latLng(lat, lng);
+        
+        const estaDentro = barrioBounds.contains(punto) && estiloRayCasting(punto, barrioGeojson);
+        
+        if (estaDentro) {
+          segmentosDentro.push(coord);
+        } else {
+          if (segmentosDentro.length > 0) {
+            longitudTotal += calcularLongitudSegmento(segmentosDentro);
+            segmentosDentro = [];
+          }
+        }
+      });
+      
+      if (segmentosDentro.length > 0) {
+        longitudTotal += calcularLongitudSegmento(segmentosDentro);
+      }
+    });
+    
+  } catch (e) {
+    console.error('Error calculando longitud:', e);
+  }
+  
+  return longitudTotal;
+}
+
+// ============================================================================
+// GESTIÓN DE CAPAS
+// ============================================================================
 
 function crearControles() {
   const container = document.getElementById('layers');
@@ -195,6 +426,7 @@ function crearControles() {
 async function toggleCapa(nombre, mostrar) {
   if (mostrar) {
     await cargarCapa(nombre);
+    cerrarSidebarEnMovil();
   } else {
     if (layerGroups[nombre]) {
       map.removeLayer(layerGroups[nombre]);
@@ -220,7 +452,7 @@ async function cargarCapa(nombre) {
   setStatus(`⏳ Cargando ${capa.icono} ${capa.label}...`, '#3498db');
   
   try {
-    let url = `${SUPABASE_URL}/rest/v1/${nombre}?select=geom&limit=1`;
+    let url = `${SUPABASE_URL}/rest/v1/${nombre}?select=*`;
     
     let res = await fetch(url, {
       headers: { 
@@ -231,33 +463,7 @@ async function cargarCapa(nombre) {
     });
     
     if (!res.ok) {
-      throw new Error(`La tabla "${nombre}" no existe o no está accesible`);
-    }
-    
-    const campos = obtenerCampos(nombre);
-    url = `${SUPABASE_URL}/rest/v1/${nombre}?select=${campos},geom`;
-    
-    res = await fetch(url, {
-      headers: { 
-        'apikey': SUPABASE_KEY, 
-        'Authorization': `Bearer ${SUPABASE_KEY}`,
-        'Content-Type': 'application/json'
-      }
-    });
-    
-    if (!res.ok) {
-      url = `${SUPABASE_URL}/rest/v1/${nombre}?select=gid,geom`;
-      res = await fetch(url, {
-        headers: { 
-          'apikey': SUPABASE_KEY, 
-          'Authorization': `Bearer ${SUPABASE_KEY}`,
-          'Content-Type': 'application/json'
-        }
-      });
-      
-      if (!res.ok) {
-        throw new Error(`Error al cargar datos de "${nombre}"`);
-      }
+      throw new Error(`Error al cargar datos de "${nombre}": ${res.status} - ${res.statusText}`);
     }
     
     const data = await res.json();
@@ -265,6 +471,9 @@ async function cargarCapa(nombre) {
     if (!data || data.length === 0) {
       throw new Error('No hay datos disponibles en esta capa');
     }
+    
+    console.log(`${nombre}: Campos disponibles en primer registro:`, Object.keys(data[0]));
+    console.log(`${nombre}: Datos del primer registro:`, data[0]);
     
     if (layerGroups[nombre]) {
       map.removeLayer(layerGroups[nombre]);
@@ -360,90 +569,9 @@ async function cargarCapa(nombre) {
   }
 }
 
-function obtenerCampos(nombre) {
-  const campos = {
-    'barrios': '*',
-    'comunas': '*',
-    'vias_pav': '*',
-    'vias_sin_pav': '*',
-    'bomberos': '*',
-    'recracion_deporte': '*',
-    'salud': '*',
-    'seguridad': '*',
-    'educacion': '*'
-  };
-  
-  return campos[nombre] || '*';
-}
-
-function crearPopup(properties, nombreCapa) {
-  let html = `<div style="min-width:220px; font-family: 'Inter', sans-serif;">`;
-  
-  // Para barrios, usar el nombre del barrio como título
-  let titulo = nombreCapa.toUpperCase();
-  if (nombreCapa.toLowerCase() === 'barrios' && properties.barrio) {
-    titulo = properties.barrio;
-  } else if (nombreCapa.toLowerCase() === 'comunas' && properties.comuna) {
-    titulo = `COMUNA ${properties.comuna}`;
-  }
-  
-  html += `<strong style="font-size: 15px; color: #1e293b; display: block; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 2px solid #84cc16;">${titulo}</strong>`;
-  
-  // Ordenar campos para mostrar primero los más importantes
-  const camposOrdenados = [];
-  const camposImportantes = ['barrio', 'comuna', 'poblacion', 'ipm', 'area', 'nombre', 'tipo'];
-  
-  // Primero agregar campos importantes
-  camposImportantes.forEach(campo => {
-    if (properties[campo] !== undefined && properties[campo] !== null) {
-      camposOrdenados.push(campo);
-    }
-  });
-  
-  // Luego agregar el resto de campos
-  for (let key in properties) {
-    if (key !== 'geom' && !camposImportantes.includes(key)) {
-      camposOrdenados.push(key);
-    }
-  }
-  
-  // Mostrar campos (excluyendo el que ya se usó como título)
-  camposOrdenados.forEach(key => {
-    if (key === 'barrio' && nombreCapa.toLowerCase() === 'barrios') {
-      return; // No repetir el barrio si ya está en el título
-    }
-    if (key === 'comuna' && nombreCapa.toLowerCase() === 'comunas') {
-      return; // No repetir la comuna si ya está en el título
-    }
-    
-    let valor = properties[key];
-    
-    // Formatear valores especiales
-    if (valor === null || valor === undefined) {
-      return; // No mostrar campos vacíos
-    } else if (key.toLowerCase().includes('area')) {
-      valor = `${parseFloat(valor).toFixed(2)} km²`;
-    } else if (key.toLowerCase().includes('poblacion') || key.toLowerCase().includes('población')) {
-      valor = parseInt(valor).toLocaleString('es-CO') + ' habitantes';
-    } else if (key.toLowerCase() === 'ipm') {
-      // IPM: multiplicar por 100 para quitar los tres ceros del final
-      valor = (parseFloat(valor) * 100).toFixed(2);
-    }
-    
-    // Formatear nombre del campo
-    let nombreCampo = key
-      .replace(/_/g, ' ')
-      .replace(/\b\w/g, l => l.toUpperCase());
-    
-    html += `<div style="margin: 8px 0; padding: 8px; background: #f8f9fa; border-radius: 6px; border-left: 3px solid #84cc16;">`;
-    html += `<span style="font-weight: 600; color: #475569; font-size: 12px;">${nombreCampo}:</span> `;
-    html += `<span style="color: #1e293b; font-size: 13px; font-weight: 500;">${valor}</span>`;
-    html += `</div>`;
-  });
-  
-  html += `</div>`;
-  return html;
-}
+// ============================================================================
+// BÚSQUEDA Y SELECCIÓN DE BARRIOS
+// ============================================================================
 
 async function cargarBarriosParaBusqueda() {
   try {
@@ -573,6 +701,8 @@ async function seleccionarBarrio(barrio) {
     await cargarCapa('barrios');
   }
   
+  cerrarSidebarEnMovil();
+  
   setStatus(`✅ Análisis completado para ${barrio.barrio}`, '#27ae60');
 }
 
@@ -596,43 +726,9 @@ function limpiarSeleccion() {
   setStatus('✅ Selección limpiada', '#27ae60');
 }
 
-function limpiarDistancias() {
-  if (clickMarker) {
-    map.removeLayer(clickMarker);
-    clickMarker = null;
-  }
-  
-  distanceLabels.forEach(label => {
-    map.removeLayer(label);
-  });
-  distanceLabels = [];
-  
-  marcadoresCercanos.forEach(marker => {
-    map.removeLayer(marker);
-  });
-  marcadoresCercanos = [];
-  
-  // Restaurar las capas originales de equipamiento
-  const capasEquipamiento = ['bomberos', 'salud', 'recracion_deporte', 'seguridad', 'educacion'];
-  capasEquipamiento.forEach(nombreCapa => {
-    const checkbox = document.getElementById(`check_${nombreCapa}`);
-    if (checkbox && checkbox.checked && capasOriginales[nombreCapa]) {
-      // Remover la capa actual
-      if (layerGroups[nombreCapa]) {
-        map.removeLayer(layerGroups[nombreCapa]);
-      }
-      // Restaurar la capa original
-      layerGroups[nombreCapa] = capasOriginales[nombreCapa];
-      layerGroups[nombreCapa].addTo(map);
-      delete capasOriginales[nombreCapa];
-    }
-  });
-  
-  document.getElementById('distance-info').style.display = 'none';
-  document.getElementById('distance-stats').innerHTML = '';
-  
-  setStatus('✅ Consulta de distancias limpiada', '#27ae60');
-}
+// ============================================================================
+// ANÁLISIS TERRITORIAL
+// ============================================================================
 
 async function cargarPuntosYViasParaAnalisis() {
   const capasParaAnalizar = ['bomberos', 'salud', 'recracion_deporte', 'seguridad', 'educacion'];
@@ -754,111 +850,9 @@ function analizarBarrioCompleto(barrio) {
   return stats;
 }
 
-function calcularLongitudViaEnBarrio(viaGeojson, barrioGeojson, barrioBounds) {
-  let longitudTotal = 0;
-  
-  try {
-    let coordinates = [];
-    
-    if (viaGeojson.type === 'LineString') {
-      coordinates = [viaGeojson.coordinates];
-    } else if (viaGeojson.type === 'MultiLineString') {
-      coordinates = viaGeojson.coordinates;
-    }
-    
-    coordinates.forEach(lineCoords => {
-      let segmentosDentro = [];
-      
-      lineCoords.forEach((coord, index) => {
-        const [lng, lat] = coord;
-        const punto = L.latLng(lat, lng);
-        
-        const estaDentro = barrioBounds.contains(punto) && estiloRayCasting(punto, barrioGeojson);
-        
-        if (estaDentro) {
-          segmentosDentro.push(coord);
-        } else {
-          if (segmentosDentro.length > 0) {
-            longitudTotal += calcularLongitudSegmento(segmentosDentro);
-            segmentosDentro = [];
-          }
-        }
-      });
-      
-      if (segmentosDentro.length > 0) {
-        longitudTotal += calcularLongitudSegmento(segmentosDentro);
-      }
-    });
-    
-  } catch (e) {
-    console.error('Error calculando longitud:', e);
-  }
-  
-  return longitudTotal;
-}
-
-function calcularLongitudSegmento(coordenadas) {
-  if (coordenadas.length < 2) return 0;
-  
-  let longitud = 0;
-  
-  for (let i = 0; i < coordenadas.length - 1; i++) {
-    const [lng1, lat1] = coordenadas[i];
-    const [lng2, lat2] = coordenadas[i + 1];
-    
-    const punto1 = L.latLng(lat1, lng1);
-    const punto2 = L.latLng(lat2, lng2);
-    
-    longitud += punto1.distanceTo(punto2);
-  }
-  
-  return longitud / 1000;
-}
-
-function estiloRayCasting(point, geojson) {
-  let coords = [];
-  
-  if (geojson.type === 'Polygon') {
-    coords = geojson.coordinates[0];
-  } else if (geojson.type === 'MultiPolygon') {
-    coords = geojson.coordinates[0][0];
-  } else {
-    return false;
-  }
-  
-  let inside = false;
-  const x = point.lng;
-  const y = point.lat;
-  
-  for (let i = 0, j = coords.length - 1; i < coords.length; j = i++) {
-    const xi = coords[i][0], yi = coords[i][1];
-    const xj = coords[j][0], yj = coords[j][1];
-    
-    const intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
-    if (intersect) inside = !inside;
-  }
-  
-  return inside;
-}
-
-function agregarEtiquetaBarrio(geojson, nombreBarrio) {
-  try {
-    const layer = L.geoJSON(geojson);
-    const center = layer.getBounds().getCenter();
-    
-    const label = L.marker(center, {
-      icon: L.divIcon({
-        className: 'barrio-label',
-        html: nombreBarrio,
-        iconSize: null
-      })
-    });
-    
-    label.addTo(barrioLabels);
-  } catch (e) {
-    console.error('Error agregando etiqueta:', e);
-  }
-}
+// ============================================================================
+// CÁLCULO DE DISTANCIAS
+// ============================================================================
 
 async function calcularDistancias(latlng) {
   limpiarDistancias();
@@ -930,24 +924,20 @@ async function calcularDistancias(latlng) {
     }
   }
   
-  // Ocultar todos los marcadores de equipamiento y mostrar solo los más cercanos
   const capasEquipamiento = ['bomberos', 'salud', 'recracion_deporte', 'seguridad', 'educacion'];
   
   capasEquipamiento.forEach(nombreCapa => {
     const checkbox = document.getElementById(`check_${nombreCapa}`);
     
     if (checkbox && checkbox.checked) {
-      // Guardar la capa original antes de modificarla
       if (layerGroups[nombreCapa] && !capasOriginales[nombreCapa]) {
         capasOriginales[nombreCapa] = layerGroups[nombreCapa];
       }
       
-      // Remover la capa actual del mapa
       if (layerGroups[nombreCapa]) {
         map.removeLayer(layerGroups[nombreCapa]);
       }
       
-      // Crear nueva capa solo con el punto más cercano
       if (puntosMasCercanos[nombreCapa]) {
         let capa = null;
         Object.values(categorias).forEach(cat => {
@@ -1020,6 +1010,45 @@ function mostrarDistancias(distancias, latlng) {
   document.getElementById('distance-stats').innerHTML = html;
   document.getElementById('distance-info').style.display = 'block';
 }
+
+function limpiarDistancias() {
+  if (clickMarker) {
+    map.removeLayer(clickMarker);
+    clickMarker = null;
+  }
+  
+  distanceLabels.forEach(label => {
+    map.removeLayer(label);
+  });
+  distanceLabels = [];
+  
+  marcadoresCercanos.forEach(marker => {
+    map.removeLayer(marker);
+  });
+  marcadoresCercanos = [];
+  
+  const capasEquipamiento = ['bomberos', 'salud', 'recracion_deporte', 'seguridad', 'educacion'];
+  capasEquipamiento.forEach(nombreCapa => {
+    const checkbox = document.getElementById(`check_${nombreCapa}`);
+    if (checkbox && checkbox.checked && capasOriginales[nombreCapa]) {
+      if (layerGroups[nombreCapa]) {
+        map.removeLayer(layerGroups[nombreCapa]);
+      }
+      layerGroups[nombreCapa] = capasOriginales[nombreCapa];
+      layerGroups[nombreCapa].addTo(map);
+      delete capasOriginales[nombreCapa];
+    }
+  });
+  
+  document.getElementById('distance-info').style.display = 'none';
+  document.getElementById('distance-stats').innerHTML = '';
+  
+  setStatus('✅ Consulta de distancias limpiada', '#27ae60');
+}
+
+// ============================================================================
+// INICIALIZACIÓN AL CARGAR LA PÁGINA
+// ============================================================================
 
 crearControles();
 cargarBarriosParaBusqueda();
