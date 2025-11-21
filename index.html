@@ -2,25 +2,35 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>PRUEBA 12345 ACTUALIZACIÓN</title>
+  <title>Geoportal Buenaventura - Versión Moderna 2.0</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <!-- VERSIÓN ACTUALIZADA 2.0 - Si ves esto en el código fuente, la página está actualizada -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
+<!-- INDICADOR DE VERSIÓN: Si ves este mensaje, estás usando la versión correcta -->
+<div style="display: none;">VERSIÓN 2.0 MODERNA - 2024</div>
+
+<!-- MAPA DE FONDO -->
 <div id="map"></div>
 
+<!-- BOTÓN HAMBURGUESA MÓVIL -->
 <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menú">
   <span></span>
   <span></span>
   <span></span>
 </button>
 
+<!-- OVERLAY PARA CERRAR MENÚ -->
 <div id="menu-overlay" class="menu-overlay"></div>
 
+<!-- PANEL LATERAL -->
 <aside id="sidebar" class="sidebar">
+  
+  <!-- Header del Panel -->
   <div class="sidebar-header">
     <div class="logo-container">
       <span class="logo-icon">🗺️</span>
@@ -32,6 +42,7 @@
     <button id="close-menu" class="close-btn" aria-label="Cerrar menú">✕</button>
   </div>
 
+  <!-- Buscador -->
   <div class="search-section">
     <div class="search-box">
       <span class="search-icon">🔍</span>
@@ -40,6 +51,7 @@
     <div id="search-results" class="search-results"></div>
   </div>
 
+  <!-- Información del Barrio Seleccionado -->
   <div id="barrio-info" class="info-panel" style="display: none;">
     <div class="info-header">
       <h3 id="barrio-name"></h3>
@@ -48,6 +60,7 @@
     <div id="barrio-stats" class="info-content"></div>
   </div>
 
+  <!-- Información de Distancias -->
   <div id="distance-info" class="info-panel distance-panel" style="display: none;">
     <div class="info-header">
       <h3>📍 Distancias</h3>
@@ -56,41 +69,50 @@
     <div id="distance-stats" class="info-content"></div>
   </div>
 
+  <!-- Contenedor de Capas -->
   <div class="layers-section">
     <h2 class="section-title">Capas del Mapa</h2>
     <div id="layers" class="layers-container"></div>
   </div>
 
+  <!-- Footer -->
   <div class="sidebar-footer">
     <p>© 2024 Edinson Christofer Angulo</p>
     <p class="footer-subtitle">Análisis Territorial</p>
   </div>
+
 </aside>
 
+<!-- CONTROLES DEL MAPA (Parte Superior Derecha) -->
 <div class="map-controls top-right">
+  
+  <!-- Mensaje de Estado -->
   <div id="status" class="status-badge">
     <span class="status-icon">⏳</span>
     <span class="status-text">Inicializando...</span>
   </div>
 
+  <!-- Controles de Zoom -->
   <div class="zoom-controls">
     <button id="zoom-in" class="zoom-btn" aria-label="Acercar" title="Acercar">+</button>
     <button id="zoom-out" class="zoom-btn" aria-label="Alejar" title="Alejar">−</button>
   </div>
+
 </div>
 
+<!-- SELECTOR DE MAPAS BASE (Parte Izquierda Vertical) -->
 <div id="basemap-selector" class="basemap-selector">
   <button class="basemap-btn active" data-basemap="osm" title="OpenStreetMap">
     <span class="basemap-icon osm"></span>
-    <span class="basemap-label">Calles</span>
+    <span class="basemap-label">OSM</span>
   </button>
-  <button class="basemap-btn" data-basemap="satellite" title="Vista Satélite">
+  <button class="basemap-btn" data-basemap="satellite" title="Google Satélite">
     <span class="basemap-icon satellite"></span>
-    <span class="basemap-label">Satélite</span>
+    <span class="basemap-label">G. Satélite</span>
   </button>
   <button class="basemap-btn" data-basemap="carto" title="Carto Light">
     <span class="basemap-icon carto"></span>
-    <span class="basemap-label">Minimalista</span>
+    <span class="basemap-label">C. Light</span>
   </button>
 </div>
 
