@@ -95,25 +95,40 @@ barrioLabels.addTo(map);
 // EVENT LISTENERS
 // ============================================================================
 
+// FUNCIONALIDAD SIDEBAR MÓVIL
 const sidebarToggle = document.getElementById('sidebar-toggle');
 const sidebar = document.getElementById('sidebar');
 const sidebarOverlay = document.getElementById('sidebar-overlay');
 
-sidebarToggle.addEventListener('click', function() {
-  sidebar.classList.toggle('open');
-  sidebarOverlay.classList.toggle('active');
-});
+// Verificar que los elementos existen
+if (sidebarToggle && sidebar && sidebarOverlay) {
+  console.log('Elementos del sidebar encontrados correctamente');
+  
+  sidebarToggle.addEventListener('click', function(e) {
+    e.preventDefault();
+    console.log('Botón hamburguesa clickeado');
+    sidebar.classList.toggle('open');
+    sidebarOverlay.classList.toggle('active');
+  });
 
-sidebarOverlay.addEventListener('click', function() {
-  sidebar.classList.remove('open');
-  sidebarOverlay.classList.remove('active');
-});
+  sidebarOverlay.addEventListener('click', function() {
+    console.log('Overlay clickeado');
+    sidebar.classList.remove('open');
+    sidebarOverlay.classList.remove('active');
+  });
+} else {
+  console.error('No se encontraron los elementos del sidebar');
+}
 
 function cerrarSidebarEnMovil() {
   if (window.innerWidth <= 768) {
     setTimeout(() => {
-      sidebar.classList.remove('open');
-      sidebarOverlay.classList.remove('active');
+      if (sidebar) {
+        sidebar.classList.remove('open');
+      }
+      if (sidebarOverlay) {
+        sidebarOverlay.classList.remove('active');
+      }
     }, 300);
   }
 }
