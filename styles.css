@@ -730,26 +730,27 @@ body {
     padding: 10px 14px;
   }
   
-  /* Selector de mapas más compacto en móvil */
+  /* Selector de mapas en móvil */
   .basemap-selector {
+    left: 10px;
     bottom: 20px;
     padding: 8px;
     gap: 8px;
   }
   
   .basemap-btn {
-    min-width: 70px;
-    padding: 10px 12px;
-    gap: 6px;
+    min-width: 60px;
+    padding: 8px 10px;
+    gap: 5px;
   }
   
   .basemap-icon {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
   }
   
   .basemap-label {
-    font-size: 10px;
+    font-size: 8px;
   }
   
   /* Ajustar zoom */
