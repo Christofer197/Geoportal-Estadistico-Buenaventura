@@ -593,12 +593,12 @@ body {
 }
 
 /* ============================================================================
-   SELECTOR DE MAPAS BASE (Parte Inferior Izquierda Vertical)
+   SELECTOR DE MAPAS BASE (Parte Inferior Derecha Vertical)
    ============================================================================ */
 
 .basemap-selector {
   position: fixed;
-  left: 20px;
+  right: 20px;
   bottom: 20px;
   z-index: 50;
   display: flex;
@@ -610,13 +610,13 @@ body {
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
   border: 2px solid rgba(134, 239, 172, 0.3);
-  animation: slideInLeft 0.4s ease-out 0.2s backwards;
+  animation: slideInRight 0.4s ease-out 0.2s backwards;
 }
 
-@keyframes slideInLeft {
+@keyframes slideInRight {
   from {
     opacity: 0;
-    transform: translateX(-30px);
+    transform: translateX(30px);
   }
   to {
     opacity: 1;
@@ -640,7 +640,7 @@ body {
 
 .basemap-btn:hover {
   border-color: var(--dark-green);
-  transform: translateX(6px);
+  transform: translateX(-6px);
   box-shadow: var(--shadow-md);
 }
 
@@ -648,7 +648,7 @@ body {
   background: linear-gradient(135deg, var(--primary-green), var(--primary-yellow));
   border-color: var(--dark-green);
   box-shadow: var(--shadow-md);
-  transform: translateX(4px);
+  transform: translateX(-4px);
 }
 
 .basemap-icon {
@@ -731,27 +731,27 @@ body {
     padding: 10px 14px;
   }
   
-  /* Selector de mapas en móvil */
+  /* Selector de mapas en móvil - MOVER A LA IZQUIERDA */
   .basemap-selector {
-    left: 10px;
-    bottom: 20px;
-    padding: 8px;
-    gap: 8px;
+    left: 10px; /* Vuelve al lado izquierdo en móviles */
+    bottom: 15px;
+    padding: 6px;
+    gap: 6px;
   }
   
   .basemap-btn {
-    min-width: 60px;
-    padding: 8px 10px;
-    gap: 5px;
+    min-width: 58px;
+    padding: 7px 8px;
+    gap: 3px;
   }
   
   .basemap-icon {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
   }
   
   .basemap-label {
-    font-size: 8px;
+    font-size: 7.5px;
   }
   
   /* Ajustar zoom */
@@ -770,23 +770,23 @@ body {
   
   .basemap-selector {
     left: 8px;
-    bottom: 15px;
-    padding: 6px;
-    gap: 6px;
+    bottom: 12px;
+    padding: 5px;
+    gap: 5px;
   }
   
   .basemap-btn {
-    min-width: 55px;
-    padding: 7px 8px;
+    min-width: 52px;
+    padding: 6px 7px;
   }
   
   .basemap-icon {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
   }
   
   .basemap-label {
     font-size: 7px;
-    letter-spacing: 0.2px;
+    letter-spacing: 0.1px;
   }
 }
