@@ -56,20 +56,21 @@ body {
   position: fixed;
   top: 20px;
   left: 20px;
-  z-index: 1001;
+  z-index: 10000;
   background: linear-gradient(135deg, #86efac 0%, #fef08a 100%);
-  border: 2px solid #84cc16;
+  border: 3px solid #65a30d;
   border-radius: 12px;
-  width: 56px;
-  height: 56px;
+  width: 60px;
+  height: 60px;
   cursor: pointer;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
-  font-size: 28px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+  font-size: 30px;
   transition: all 0.3s ease;
   align-items: center;
   justify-content: center;
   font-weight: bold;
   color: #1e293b;
+  -webkit-tap-highlight-color: transparent;
 }
 
 #sidebar-toggle:active {
@@ -778,8 +779,15 @@ body {
    RESPONSIVE DESIGN - MEDIA QUERIES
    ============================================================================ */
 
-/* TABLETS Y MÓVILES (max-width: 768px) */
-@media (max-width: 768px) {
+/* MÓVILES Y TABLETS (max-width: 768px) */
+@media screen and (max-width: 768px) {
+  
+  /* Mostrar botón hamburguesa */
+  #sidebar-toggle {
+    display: flex !important;
+  }
+  
+  /* Sidebar oculto por defecto */
   #sidebar {
     width: 85vw;
     max-width: 320px;
@@ -787,108 +795,21 @@ body {
     box-shadow: 8px 0 40px rgba(0, 0, 0, 0.3);
   }
 
+  /* Sidebar visible cuando está abierto */
   #sidebar.open {
     transform: translateX(0);
   }
 
-  #sidebar-toggle {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-  }
-
+  /* Ajustar posición de controles */
   #basemap-selector {
-    top: 80px;
+    top: 90px;
     right: 10px;
-    padding: 4px;
-  }
-
-  .basemap-option {
-    min-width: 150px;
-    padding: 10px 12px;
-  }
-
-  .basemap-icon {
-    width: 30px;
-    height: 30px;
-  }
-
-  .basemap-label {
-    font-size: 11px;
-  }
-
-  #zoom-controls {
-    top: 280px;
-    right: 10px;
-  }
-
-  .zoom-button {
-    width: 48px;
-    height: 48px;
-    font-size: 24px;
-  }
-
-  #status {
-    top: 10px;
-    left: 80px;
-    right: 10px;
-    max-width: calc(100% - 90px);
-    padding: 10px 14px;
-    font-size: 12px;
-  }
-
-  #header h1 {
-    font-size: 18px;
-  }
-
-  #header p {
-    font-size: 11px;
-  }
-
-  #search-input {
-    font-size: 13px;
-    padding: 10px 14px 10px 38px;
-  }
-
-  .layer-category-title {
-    font-size: 11px;
-    padding: 10px 14px;
-  }
-
-  .layer-item {
-    padding: 10px 12px;
-  }
-
-  .layer-name {
-    font-size: 12px;
-  }
-
-  .layer-icon {
-    font-size: 16px;
-    min-width: 22px;
-  }
-
-  #barrio-info, #distance-info {
-    max-height: 300px;
-  }
-}
-
-/* MÓVILES PEQUEÑOS (max-width: 480px) */
-@media (max-width: 480px) {
-  #sidebar {
-    width: 90vw;
-    max-width: 280px;
-  }
-
-  #basemap-selector {
-    flex-direction: column;
-    padding: 4px;
+    padding: 6px;
   }
 
   .basemap-option {
     min-width: 140px;
-    padding: 8px 10px;
-    gap: 8px;
+    padding: 10px 12px;
   }
 
   .basemap-icon {
@@ -897,36 +818,151 @@ body {
   }
 
   .basemap-label {
-    font-size: 10px;
+    font-size: 11px;
   }
 
   #zoom-controls {
-    right: 8px;
+    top: 300px;
+    right: 10px;
   }
 
   .zoom-button {
-    width: 44px;
-    height: 44px;
-    font-size: 22px;
+    width: 50px;
+    height: 50px;
+    font-size: 26px;
   }
 
+  /* Ajustar mensaje de estado */
+  #status {
+    top: 10px;
+    left: 86px;
+    right: 10px;
+    max-width: calc(100% - 100px);
+    padding: 10px 14px;
+    font-size: 12px;
+  }
+
+  /* Ajustar textos del header */
   #header h1 {
-    font-size: 16px;
+    font-size: 19px;
   }
 
-  #layers-container {
-    padding: 12px;
+  #header p {
+    font-size: 12px;
   }
 
-  .info-item, .distance-item {
+  /* Ajustar buscador */
+  #search-input {
+    font-size: 14px;
+    padding: 11px 14px 11px 40px;
+  }
+
+  /* Ajustar categorías de capas */
+  .layer-category-title {
+    font-size: 12px;
+    padding: 11px 14px;
+  }
+
+  .layer-item {
+    padding: 11px 12px;
+  }
+
+  .layer-name {
+    font-size: 12px;
+  }
+
+  .layer-icon {
+    font-size: 18px;
+    min-width: 24px;
+  }
+
+  /* Ajustar paneles de información */
+  #barrio-info, #distance-info {
+    max-height: 320px;
+  }
+}
+
+/* MÓVILES PEQUEÑOS (max-width: 480px) */
+@media screen and (max-width: 480px) {
+  
+  /* Sidebar más ancho en pantallas pequeñas */
+  #sidebar {
+    width: 90vw;
+    max-width: 300px;
+  }
+  
+  /* Botón más grande en móviles pequeños */
+  #sidebar-toggle {
+    width: 60px;
+    height: 60px;
+    font-size: 30px;
+  }
+
+  /* Selector de mapas más compacto */
+  #basemap-selector {
+    flex-direction: column;
+    padding: 4px;
+    top: 95px;
+  }
+
+  .basemap-option {
+    min-width: 130px;
+    padding: 9px 10px;
+    gap: 8px;
+  }
+
+  .basemap-icon {
+    width: 26px;
+    height: 26px;
+  }
+
+  .basemap-label {
+    font-size: 10px;
+  }
+
+  /* Controles de zoom */
+  #zoom-controls {
+    right: 8px;
+    top: 320px;
+  }
+
+  .zoom-button {
+    width: 46px;
+    height: 46px;
+    font-size: 24px;
+  }
+
+  /* Status más compacto */
+  #status {
+    left: 90px;
     font-size: 11px;
-    padding: 8px 10px;
+    padding: 9px 12px;
+  }
+
+  /* Header más pequeño */
+  #header h1 {
+    font-size: 17px;
+  }
+
+  #header p {
+    font-size: 11px;
+  }
+
+  /* Contenedor de capas */
+  #layers-container {
+    padding: 14px;
+  }
+
+  /* Items de información */
+  .info-item, .distance-item {
+    font-size: 12px;
+    padding: 9px 10px;
   }
 }
 
 /* TABLETS (769px - 1024px) */
-@media (min-width: 769px) and (max-width: 1024px) {
+@media screen and (min-width: 769px) and (max-width: 1024px) {
   #sidebar {
-    width: 300px;
+    width: 320px;
   }
 }
