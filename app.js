@@ -95,40 +95,39 @@ barrioLabels.addTo(map);
 // EVENT LISTENERS
 // ============================================================================
 
-// FUNCIONALIDAD SIDEBAR MÓVIL
-const sidebarToggle = document.getElementById('sidebar-toggle');
+// FUNCIONALIDAD MENÚ MÓVIL
+const menuToggle = document.getElementById('menu-toggle');
+const closeMenu = document.getElementById('close-menu');
 const sidebar = document.getElementById('sidebar');
-const sidebarOverlay = document.getElementById('sidebar-overlay');
+const menuOverlay = document.getElementById('menu-overlay');
 
-// Verificar que los elementos existen
-if (sidebarToggle && sidebar && sidebarOverlay) {
-  console.log('Elementos del sidebar encontrados correctamente');
+if (menuToggle && sidebar && menuOverlay) {
   
-  sidebarToggle.addEventListener('click', function(e) {
-    e.preventDefault();
-    console.log('Botón hamburguesa clickeado');
-    sidebar.classList.toggle('open');
-    sidebarOverlay.classList.toggle('active');
+  menuToggle.addEventListener('click', function() {
+    sidebar.classList.add('open');
+    menuOverlay.classList.add('active');
+    menuToggle.classList.add('active');
   });
-
-  sidebarOverlay.addEventListener('click', function() {
-    console.log('Overlay clickeado');
+  
+  closeMenu.addEventListener('click', function() {
     sidebar.classList.remove('open');
-    sidebarOverlay.classList.remove('active');
+    menuOverlay.classList.remove('active');
+    menuToggle.classList.remove('active');
   });
-} else {
-  console.error('No se encontraron los elementos del sidebar');
+  
+  menuOverlay.addEventListener('click', function() {
+    sidebar.classList.remove('open');
+    menuOverlay.classList.remove('active');
+    menuToggle.classList.remove('active');
+  });
 }
 
 function cerrarSidebarEnMovil() {
   if (window.innerWidth <= 768) {
     setTimeout(() => {
-      if (sidebar) {
-        sidebar.classList.remove('open');
-      }
-      if (sidebarOverlay) {
-        sidebarOverlay.classList.remove('active');
-      }
+      if (sidebar) sidebar.classList.remove('open');
+      if (menuOverlay) menuOverlay.classList.remove('active');
+      if (menuToggle) menuToggle.classList.remove('active');
     }, 300);
   }
 }
@@ -137,8 +136,9 @@ map.on('click', function(e) {
   calcularDistancias(e.latlng);
 });
 
-document.querySelectorAll('.basemap-option').forEach(option => {
-  option.addEventListener('click', function() {
+// SELECTOR DE MAPAS BASE
+document.querySelectorAll('.basemap-btn').forEach(button => {
+  button.addEventListener('click', function() {
     const basemapType = this.dataset.basemap;
     
     if (currentBasemap) {
@@ -148,8 +148,8 @@ document.querySelectorAll('.basemap-option').forEach(option => {
     currentBasemap = basemaps[basemapType];
     currentBasemap.addTo(map);
     
-    document.querySelectorAll('.basemap-option').forEach(opt => {
-      opt.classList.remove('active');
+    document.querySelectorAll('.basemap-btn').forEach(btn => {
+      btn.classList.remove('active');
     });
     this.classList.add('active');
     
@@ -173,11 +173,11 @@ document.getElementById('zoom-out').addEventListener('click', function() {
   map.zoomOut();
 });
 
-document.getElementById('clear-selection-btn').addEventListener('click', function() {
+document.getElementById('clear-selection').addEventListener('click', function() {
   limpiarSeleccion();
 });
 
-document.getElementById('clear-distance-btn').addEventListener('click', function() {
+document.getElementById('clear-distance').addEventListener('click', function() {
   limpiarDistancias();
 });
 
