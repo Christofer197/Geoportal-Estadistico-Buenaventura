@@ -629,13 +629,13 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  padding: 8px 10px;
+  padding: 8px 8px;
   background: white;
   border: 2px solid #e2e8f0;
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  min-width: 65px;
+  min-width: 60px;
 }
 
 .basemap-btn:hover {
@@ -652,8 +652,8 @@ body {
 }
 
 .basemap-icon {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   transition: all 0.3s ease;
@@ -677,7 +677,7 @@ body {
 }
 
 .basemap-label {
-  font-size: 8.5px;
+  font-size: 8px;
   font-weight: 700;
   color: var(--text-dark);
   text-transform: uppercase;
@@ -731,27 +731,27 @@ body {
     padding: 10px 14px;
   }
   
-  /* Selector de mapas en móvil - MOVER A LA IZQUIERDA */
+  /* Selector de mapas en móvil - MANTENER A LA DERECHA */
   .basemap-selector {
-    left: 10px; /* Vuelve al lado izquierdo en móviles */
+    right: 10px; /* Mantener a la derecha en móviles */
     bottom: 15px;
-    padding: 6px;
-    gap: 6px;
+    padding: 4px;
+    gap: 4px;
   }
   
   .basemap-btn {
-    min-width: 58px;
-    padding: 7px 8px;
-    gap: 3px;
+    min-width: 50px;
+    padding: 6px 6px;
+    gap: 2px;
   }
   
   .basemap-icon {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
   }
   
   .basemap-label {
-    font-size: 7.5px;
+    font-size: 7px;
   }
   
   /* Ajustar zoom */
@@ -769,24 +769,24 @@ body {
   }
   
   .basemap-selector {
-    left: 8px;
+    right: 8px; /* Mantener a la derecha */
     bottom: 12px;
-    padding: 5px;
-    gap: 5px;
+    padding: 4px;
+    gap: 3px;
   }
   
   .basemap-btn {
-    min-width: 52px;
-    padding: 6px 7px;
+    min-width: 46px;
+    padding: 5px 5px;
   }
   
   .basemap-icon {
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
   }
   
   .basemap-label {
-    font-size: 7px;
+    font-size: 6.5px;
     letter-spacing: 0.1px;
   }
 }
